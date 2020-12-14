@@ -17,7 +17,14 @@ else
     local crosshairSize = gui.add_slider("Size", 0, 300)
     local crosshairWidth = gui.add_slider("Width", 1, 10)
     local crosshairGap = gui.add_slider("Gap", 0, 300)
+    local clanTag = gui.add_checkbox("Clantag");
+    local clantagAnimated = gui.add_checkbox("Animated");
+    local clantagSynced = gui.add_checkbox("Synced");
+    local clantagString = gui.add_textbox("Clantag", "clownemoji");
     local enableWatermark = gui.add_checkbox("Enable watermark");
+    local greyLobbyColor = gui.add_checkbox("Grey Lobby Color");
+    local antiReportbot = gui.add_checkbox("Anti Reportbot");
+    local antiFlicker = gui.add_checkbox("Legit AA Anti Flicker");
     local localPlayer;
 
     local savedTick = globalvars.curtime;
@@ -176,7 +183,6 @@ else
                     endText = endText .. table[i];
                 end
             end
-
             return endText
         else
             safeLog("[Error] - Invalid Entity\n", 255, 0, 0, 255)
@@ -185,6 +191,10 @@ else
     end
 
     function on_gameevent(e)
+        if(e:get_name() == "cs_win_panel_match" and antiReportbot:get_value()) then
+            engine.client_cmd("disconnect")
+        end 
+
         if (e:get_name() == "player_death" and enableKillsay:get_value()) then
             local deadEntity = entitylist.get_entity_from_userid(e:get_int("userid"));
             local killerEntity = entitylist.get_entity_from_userid(e:get_int("attacker"));
@@ -223,6 +233,12 @@ else
             local text = "clownemoji.club lua | [regular] | version: " .. currentVersion .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid;
 
             renderer.text(20, 20, text, color.new(255, 255, 255), font);
+        end
+
+        if(greyLobbyColor:get_value()) then
+            engine.client_cmd("cl_color 64 64 64 64");
+        elseif(not greyLobbyColor:get_value()) then
+            engine.client_cmd("cl_color 0");
         end
 
         if (engine.in_game()) then
