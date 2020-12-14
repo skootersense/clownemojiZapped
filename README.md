@@ -1,5 +1,9 @@
 # clownemojiZapped
 
+# Description
+- First LUA Script ever made for CS:GO Cheat Zapped.cc 
+- Credits to [Onion](github.com/cyanewfag] for his help and drawing framework
+
 # Killsay: 
 - Killsay Enabled - Enables killsay
 - On Friendly - Killsay works on teammates
