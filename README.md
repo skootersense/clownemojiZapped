@@ -1,3 +1,3 @@
 # clownemojiZapped
 
-![ScreenShot](https://imgur.com/a/YgLL2Dp)/{pat
+![ScreenShot](https://imgur.com/a/YgLL2Dp)
