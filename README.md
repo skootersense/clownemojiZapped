@@ -12,7 +12,7 @@
 
 # Variables:
 - %local& - Local player name - {localPlayer:get_name()}
-- &username& - Zapped form username - {zapped.username}
+- &username& - Zapped forum username - {zapped.username}
 - &uid& - Zapped UID - {zapped.userid}
 - &weapon& - Current weapon - {event:get_string("weapon")}
 - &headshot& - Headshot/Bodyshot - {event:get_bool("headshot")}
