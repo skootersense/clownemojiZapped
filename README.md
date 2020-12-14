@@ -9,6 +9,7 @@
 - On Friendly - Killsay works on teammates
 - Filter Name - Killsay uses custom variables
 
+
 # Variables:
 - %local& - Local player name - {localPlayer:get_name()}
 - &username& - Zapped form username - {zapped.username}
@@ -16,16 +17,20 @@
 - &weapon& - Current weapon - {event:get_string("weapon")}
 - &headshot& - Headshot/Bodyshot - {event:get_bool("headshot")}
 
+
 # Killsay:
 - Killsay - Custom killsay message (make sure filter name is disabled if you don't want to use variables)
+
 
 # Namespam:
 - Namespam Enabled - Enabled namespam
 - Namespam - Custom name
 - Namespam Interval (ms) - Delay between name changes
 
+
 # Logs:
 - Enable Logging - Enables console logging
+
 
 # Crosshair:
 - Enable Custom Crosshair - Enables custom crosshair
@@ -35,8 +40,10 @@
 - Width - Crosshair width
 - Gap - Crosshair gap
 
+
 # Watermark
 - Enable watermark - Enables watermark
+
 
 # Menu Screenshot
 
