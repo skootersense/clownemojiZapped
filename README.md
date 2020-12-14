@@ -1,7 +1,5 @@
 # clownemojiZapped
 
-- Features - 
-
 # Killsay: 
 - Killsay Enabled - Enables killsay
 - On Friendly - Killsay works on teammates
