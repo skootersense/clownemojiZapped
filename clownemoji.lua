@@ -1,5 +1,5 @@
 local version = "1.0.1"
-if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version", version)) then
+if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version", version))) then
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
     local enableKillsay = gui.add_checkbox("Killsay Enabled")
