@@ -15,7 +15,7 @@
 # Killsay:
 - Killsay - Custom killsay message (make sure filter name is disabled if you don't want to use variables)
 
-#N mespam:
+# Namespam:
 - Namespam Enabled - Enabled namespam
 - Namespam - Custom name
 - Namespam Interval (ms) - Delay between name changes
