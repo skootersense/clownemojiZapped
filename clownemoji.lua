@@ -1,4 +1,4 @@
-local version = "1.0.1" -- Version
+local version = "1.0.2" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
