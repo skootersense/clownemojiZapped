@@ -20,7 +20,7 @@ else
     local crosshairGap = gui.add_slider("Gap", 0, 300)
     local enableClantagChanger = gui.add_checkbox("Clantag Changer", true);
     local clantag = gui.add_textbox("Clantag", "clownemoji");
-    local speedCheck = gui.add_slider("Speed (ms)", 5, 500, 35);    
+    local speedCheck = gui.add_slider("Speed (ms)", 5, 500, 35);
     local enableWatermark = gui.add_checkbox("Enable watermark");
     local greyLobbyColor = gui.add_checkbox("Grey Lobby Color");
     local antiReportbot = gui.add_checkbox("Anti Reportbot");
@@ -34,6 +34,7 @@ else
     local localPlayer;
     local savedTick = globalvars.curtime;
     local curTick = globalvars.curtime
+    local currentTime = globalvars.curtime;
     local boolSwap = false;
     local nameChanged = 0;
     local screenSize = engine.screen_size();
@@ -242,6 +243,68 @@ else
         end
     end
 
+    function runClantag()
+        localPlayer = entitylist.get_localplayer();
+
+        if (localPlayer ~= nil and engine.in_game()) then
+            if (enableClantagChanger:get_value()) then
+                if (not loaded) then currentTime = globalvars.curtime; loaded = true; end
+                    if (globalvars.curtime - currentTime > speedCheck:get_value() / 100) then
+                    currentTime = globalvars.curtime;
+                    local indices = {};
+                    for i = 1, string.len(clantag:get_value()) do
+                        table.insert(indices, i - 1);
+                    end
+
+                    local tickinterval = globalvars.interval_per_tick;
+                    local tickcount = globalvars.tickcount + time_to_ticks(game.latency)
+                    local i = tickcount / time_to_ticks(speedCheck:get_value() / 100);
+                    i = math.floor(i % #indices)
+                    i = indices[i+1]+1
+
+                    utils.set_clan_tag(string.sub(clantag:get_value(), i, i + #indices))
+                end
+            end
+        else
+            currentTime = globalvars.curtime;
+            loaded = false;
+        end
+    end
+
+    function antiFlicker() 
+        if (utils.timestamp() - time >= 1) then
+            localPlayer = entitylist.get_localplayer();
+    
+            if (localPlayer ~= nil and engine.in_game()) then
+                values = { game.focused, game.fps, game.latency };
+    
+                if (values[1] ~= nil and values[2] ~= nil and values[3] ~= nil) then
+                    if (enableAntiFlicker:get_value()) then
+                        controls[2]:set_value(0);
+                        local allowed = true;
+                            
+                        if (checkFocus:get_value()) then allowed = values[1]; end
+                        if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
+                        if (values[2] < checkFPS:get_value()) then allowed = false; end
+                        if (values[3] > checkPing:get_value()) then allowed = false; end
+    
+                        if (allowed) then
+                            if (controls[1]:get_value() ~= "Always") then
+                                controls[1]:set_value("Always");
+                            end
+                        else
+                            if (controls[1]:get_value() ~= "Disabled") then
+                                controls[1]:set_value("Disabled");
+                            end
+                        end
+                    end
+                end
+            end
+    
+            time = utils.timestamp();
+        end
+    end
+
     function on_render()
         if(enableWatermark:get_value()) then
             local text = "clownemoji.club lua | [regular] | version: " .. version .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid;
@@ -255,6 +318,9 @@ else
             engine.client_cmd("cl_color 0");
         end
 
+        runClantag();
+        antiFlicker();
+
         if (engine.in_game()) then
             localPlayer = entitylist.get_localplayer();
             curTick = globalvars.curtime;
@@ -263,51 +329,6 @@ else
             end
 
             if (localPlayer ~= nil) then
-                if(enableClantagChanger:get_value()) then
-                    if (not loaded) then curTick = globalvars.curtime; loaded = true; end
-                    if (globalvars.curtime - curTick > speedCheck:get_value() / 100) then
-                        curTick = globalvars.curtime;
-                        local indices = {};
-                        for i = 1, string.len(clantag:get_value()) do
-                            table.insert(indices, i - 1);
-                        end
-        
-                        local tickinterval = globalvars.interval_per_tick;
-                        local tickcount = globalvars.tickcount + time_to_ticks(game.latency)
-                        local i = tickcount / time_to_ticks(speedCheck:get_value() / 100);
-                        i = math.floor(i % #indices)
-                        i = indices[i+1]+1
-        
-                        utils.set_clan_tag(string.sub(clantag:get_value(), i, i + #indices))
-                    end
-                end
-
-                if(utils.timestamp - time >= 1) then
-                    values = { game.focused, game.fps, game.latency };
-
-                    if (values[1] ~= nil and values[2] ~= nil and values[3] ~= nil) then
-                        if (enableAntiFlicker:get_value()) then
-                            controls[2]:set_value(0);
-                            local allowed = true;
-                        
-                            if (checkFocus:get_value()) then allowed = values[1]; end
-                            if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
-                            if (values[2] < checkFPS:get_value()) then allowed = false; end
-                            if (values[3] > checkPing:get_value()) then allowed = false; end
-
-                            if (allowed) then
-                                if (controls[1]:get_value() ~= "Always") then
-                                    controls[1]:set_value("Always");
-                                end
-                            else
-                                if (controls[1]:get_value() ~= "Disabled") then
-                                    controls[1]:set_value("Disabled");
-                                end
-                            end
-                        end
-                    end
-                end
-
                 if (nameChanged <= 10) then
                     if (enableNameSpam:get_value()) then
                         if (curTick - savedTick >= nameSpamSpeed:get_value() / 1000) then
@@ -354,6 +375,8 @@ else
                     renderer.gradient_rect((screenSize.x / 2) + (crosshairWidth:get_value() / 2) + crosshairGap:get_value(), (screenSize.y / 2) - (crosshairWidth:get_value() / 2), crosshairSize:get_value(), crosshairWidth:get_value(), false, crosshairClr, color2);
                 end
             end
+
+            
         else
             savedTick = globalvars.curtime;
             curTick = globalvars.curtime;
