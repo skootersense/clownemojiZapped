@@ -1,7 +1,8 @@
-local version = "1.0.1"
-if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then
+local version = "1.0.1" -- Version
+if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
+    -- UI Variables
     local enableKillsay = gui.add_checkbox("Killsay Enabled")
     local includeTeammates = gui.add_checkbox("On Friendly")
     local filterNames = gui.add_checkbox("Filter Name")
@@ -17,26 +18,39 @@ else
     local crosshairSize = gui.add_slider("Size", 0, 300)
     local crosshairWidth = gui.add_slider("Width", 1, 10)
     local crosshairGap = gui.add_slider("Gap", 0, 300)
-    local clanTag = gui.add_checkbox("Clantag");
-    local clantagAnimated = gui.add_checkbox("Animated");
-    local clantagSynced = gui.add_checkbox("Synced");
-    local clantagString = gui.add_textbox("Clantag", "clownemoji");
+    local enableClantagChanger = gui.add_checkbox("Clantag Changer", true);
+    local clantag = gui.add_textbox("Clantag", "clownemoji");
+    local speedCheck = gui.add_slider("Speed (ms)", 5, 500, 35);    
     local enableWatermark = gui.add_checkbox("Enable watermark");
     local greyLobbyColor = gui.add_checkbox("Grey Lobby Color");
     local antiReportbot = gui.add_checkbox("Anti Reportbot");
-    local antiFlicker = gui.add_checkbox("Legit AA Anti Flicker");
-    local localPlayer;
+    local enableAntiFlicker = gui.add_checkbox("Anti-Flicker");
+    local checkFocus = gui.add_checkbox("Focused Check");
+    local checkChoke = gui.add_checkbox("Restrict Choke");
+    local checkFPS = gui.add_slider("Minimum FPS", 1, 120, 75);
+    local checkPing = gui.add_slider("Maximum Ping", 1, 999, 100);
 
+    -- Misc Variables
+    local localPlayer;
     local savedTick = globalvars.curtime;
     local curTick = globalvars.curtime
     local boolSwap = false;
     local nameChanged = 0;
-    local currentVersion = "1.0";
     local screenSize = engine.screen_size();
     local watermarkFont = renderer.create_font("Verdana", 12, true);
+    local loaded = false;
+    local values = {};
+    local controls = { gui.find("legit_aa"), gui.find("legit_max_ping"), gui.find("fake_lag"), gui.find("fake_lag_trigger_limit") }
+    local time = utils.timestamp();
 
+    -- Load message
     utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", color.new(110,221,255));
     utils.event_log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", false);
+
+    -- Addictional functions
+    local function time_to_ticks(time)
+        return math.floor(time / globalvars.interval_per_tick + .5)
+    end
 
     function safeGetProp(entity, str, index, custom)
         if (engine.in_game()) then
@@ -230,7 +244,7 @@ else
 
     function on_render()
         if(enableWatermark:get_value()) then
-            local text = "clownemoji.club lua | [regular] | version: " .. currentVersion .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid;
+            local text = "clownemoji.club lua | [regular] | version: " .. version .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid;
 
             renderer.text(20, 20, text, color.new(255, 255, 255), font);
         end
@@ -249,6 +263,51 @@ else
             end
 
             if (localPlayer ~= nil) then
+                if(enableClantagChanger:get_value()) then
+                    if (not loaded) then curTick = globalvars.curtime; loaded = true; end
+                    if (globalvars.curtime - curTick > speedCheck:get_value() / 100) then
+                        curTick = globalvars.curtime;
+                        local indices = {};
+                        for i = 1, string.len(clantag:get_value()) do
+                            table.insert(indices, i - 1);
+                        end
+        
+                        local tickinterval = globalvars.interval_per_tick;
+                        local tickcount = globalvars.tickcount + time_to_ticks(game.latency)
+                        local i = tickcount / time_to_ticks(speedCheck:get_value() / 100);
+                        i = math.floor(i % #indices)
+                        i = indices[i+1]+1
+        
+                        utils.set_clan_tag(string.sub(clantag:get_value(), i, i + #indices))
+                    end
+                end
+
+                if(utils.timestamp - time >= 1) then
+                    values = { game.focused, game.fps, game.latency };
+
+                    if (values[1] ~= nil and values[2] ~= nil and values[3] ~= nil) then
+                        if (enableAntiFlicker:get_value()) then
+                            controls[2]:set_value(0);
+                            local allowed = true;
+                        
+                            if (checkFocus:get_value()) then allowed = values[1]; end
+                            if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
+                            if (values[2] < checkFPS:get_value()) then allowed = false; end
+                            if (values[3] > checkPing:get_value()) then allowed = false; end
+
+                            if (allowed) then
+                                if (controls[1]:get_value() ~= "Always") then
+                                    controls[1]:set_value("Always");
+                                end
+                            else
+                                if (controls[1]:get_value() ~= "Disabled") then
+                                    controls[1]:set_value("Disabled");
+                                end
+                            end
+                        end
+                    end
+                end
+
                 if (nameChanged <= 10) then
                     if (enableNameSpam:get_value()) then
                         if (curTick - savedTick >= nameSpamSpeed:get_value() / 1000) then
@@ -299,6 +358,7 @@ else
             savedTick = globalvars.curtime;
             curTick = globalvars.curtime;
             nameChanged = 0;
+            loaded = false;
         end
     end
 end
