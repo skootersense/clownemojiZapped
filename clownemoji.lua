@@ -1,34 +1,34 @@
-local version = "1.0.4" -- Version
+local version = "1.0.5" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
     -- UI Variables
-    local enableKillsay = gui.add_checkbox("Killsay Enabled")
-    local includeTeammates = gui.add_checkbox("On Friendly")
-    local filterNames = gui.add_checkbox("Filter Name")
-    local messageKillsay = gui.add_textbox("Killsay", "&user& killed by &local& username &username& uid &uid& using &weapon& and was &headshot&")
-    local enableNameSpam = gui.add_checkbox("Namespam Enabled", false);
-    local name = gui.add_textbox("Namespam", "clownemoji.club");
-    local nameSpamSpeed = gui.add_slider("Namespam Interval (ms)", 10, 500, 35);
-    local zappedConsoleLogger = gui.add_checkbox("Enable Logging");
-    local consoleColor = gui.add_colorpicker("Console Color", color.new(214, 76, 203, 255))
-    local crosshairEnabled = gui.add_checkbox("Enable custom crosshair");
-    local crosshairColor = gui.add_colorpicker("Crosshair Color", color.new(214, 76, 203, 255));
-    local forceWhenUnscoped = gui.add_checkbox("Draw Only On Snipers");
-    local crosshairSize = gui.add_slider("Size", 0, 300)
-    local crosshairWidth = gui.add_slider("Width", 1, 10)
-    local crosshairGap = gui.add_slider("Gap", 0, 300)
-    local enableClantagChanger = gui.add_checkbox("Clantag Changer", true);
-    local clantag = gui.add_textbox("Clantag", "clownemoji");
-    local speedCheck = gui.add_slider("Speed (ms)", 5, 500, 35);
-    local enableWatermark = gui.add_checkbox("Enable watermark");
-    local greyLobbyColor = gui.add_checkbox("Grey Lobby Color");
-    local antiReportbot = gui.add_checkbox("Anti Reportbot");
-    local enableAntiFlicker = gui.add_checkbox("Anti-Flicker");
-    local checkFocus = gui.add_checkbox("Focused Check");
-    local checkChoke = gui.add_checkbox("Restrict Choke");
-    local checkFPS = gui.add_slider("Minimum FPS", 0, 120, 75);
-    local checkPing = gui.add_slider("Maximum Ping", 0, 999, 100);
+    local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
+    local antiReportbot = gui.add_checkbox("Anti-Reportbot Enabled");
+    local enableClantagChanger = gui.add_checkbox("Clantag Enabled");
+    local enableKillsay = gui.add_checkbox("Killsay Enabled");
+    local enableNameSpam = gui.add_checkbox("Namespam Enabled");
+    local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
+    local greyLobbyColor = gui.add_checkbox("Gray Color Enabled");
+    local enableWatermark = gui.add_checkbox("Watermark Enabled");
+    local zappedConsoleLogger = gui.add_checkbox("Logging Enabled");
+    local includeTeammates = gui.add_checkbox("Killsay - On Friendly")
+    local filterNames = gui.add_checkbox("Killsay - Filter Name")
+    local messageKillsay = gui.add_textbox("Killsay - Message", "&user& killed by &local& username &username& uid &uid& using &weapon& and was &headshot&")
+    local name = gui.add_textbox("Namespam - Message", "clownemoji.club");
+    local nameSpamSpeed = gui.add_slider("Namespam - Interval (ms)", 10, 500, 35);
+    local crosshairColor = gui.add_colorpicker("Crosshair - Color", color.new(214, 76, 203, 255));
+    local forceWhenUnscoped = gui.add_checkbox("Crosshair - Only Snipers");
+    local crosshairSize = gui.add_slider("Crosshair - Size", 0, 300)
+    local crosshairWidth = gui.add_slider("Crosshair - Width", 1, 10)
+    local crosshairGap = gui.add_slider("Crosshair - Gap", 0, 300)
+    local clantag = gui.add_textbox("Clantag - Text", "clownemoji");
+    local speedCheck = gui.add_slider("Clantag - Speed (ms)", 5, 500, 35);
+    local checkFocus = gui.add_checkbox("Anti-Flicker - Focused Check");
+    local checkChoke = gui.add_checkbox("Anti-Flicker - Restrict Choke");
+    local checkFPS = gui.add_slider("Anti-Flicker - Minimum FPS", 0, 120, 75);
+    local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
+    local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
     -- local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
 
     -- Misc Variables
@@ -283,12 +283,13 @@ else
                         if (enableAntiFlicker:get_value()) then
                             controls[2]:set_value(0);
                             local allowed = true;
+                            local velocity = vector.new(safeGetProp(localPlayer, "m_vecVelocity[0]", nil, true), safeGetProp(localPlayer, "m_vecVelocity[1]", nil, true), safeGetProp(localPlayer, "m_vecVelocity[2]", nil, true)):length2d();
                                 
                             if (checkFocus:get_value()) then allowed = values[1]; end
                             if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
                             if (checkFPS:get_value() ~= 0) then if (values[2] < checkFPS:get_value()) then allowed = false; end end
                             if (checkPing:get_value() ~= 0) then if (values[3] > checkPing:get_value()) then allowed = false; end end
-                            -- if (checkVelocity:get_value() ~= 0) then if (velocity > checkVelocity:get_value()) then allowed = false; end end
+                            if (checkVelocity:get_value() ~= 0) then if (velocity > checkVelocity:get_value()) then allowed = false; end end
         
                             if (allowed) then
                                 if (controls[1]:get_value() ~= "Always") then
