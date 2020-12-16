@@ -60,7 +60,7 @@
 
 
 # Anti-Flicker
-- Anti-Flicker = Enables anti-flicker
+- Anti-Flicker - Enables anti-flicker
 - Focused Check - When you're  unfocused in CS:GO it limits fps and disables legit AA to avoid using cpu for no reason 
 - Choke Check - Disables legit AA when using fake lag 
 - Maximum FPS - Legit AA fps limit
