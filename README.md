@@ -4,7 +4,9 @@
 - First LUA Script ever made for CS:GO Cheat Zapped.cc 
 - Credits to [Onion](github.com/cyanewfag) for his help and drawing framework
 
-#Features explained
+
+# Features explained
+
 
 # Killsay: 
 - Killsay Enabled - Enables killsay
