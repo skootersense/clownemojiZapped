@@ -29,7 +29,7 @@ else
     local checkFPS = gui.add_slider("Anti-Flicker - Minimum FPS", 0, 120, 75);
     local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
     local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
-    -- local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
+    local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
 
     -- Misc Variables
     local localPlayer;
