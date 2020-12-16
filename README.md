@@ -47,7 +47,7 @@
 
 # Menu Screenshot
 
-![ScreenShot](https://i.imgur.com/qLNmV1B.png)
+![ScreenShot](https://i.imgur.com/uqH677U.gif)
 
 
 # Clownemoji.club
