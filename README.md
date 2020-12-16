@@ -45,6 +45,23 @@
 - Enable watermark - Enables watermark
 
 
+# Grey Lobby Color
+- Grey Lobby Color - Sets your lobby color to grey
+
+
+# Anti Reportbot
+- Anti-Reportbot - Executes 'disconnect' command when game has ended
+
+
+# Anti-Flicker
+- Anti-Flicker = Enables anti-flicker
+- Focused Check - When you're  unfocused in CS:GO it limits fps and disables legit AA to avoid using cpu for no reason 
+- Choke Check - Disables legit AA when using fake lag 
+- Maximum FPS - Legit AA fps limit
+- Maximum PING - Legit AA ping limit
+- Velocity Threshold - Legit AA velocity limit
+
+
 # Menu Screenshot
 
 ![ScreenShot](https://i.imgur.com/uqH677U.gif)
