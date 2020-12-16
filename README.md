@@ -3,7 +3,7 @@
 # Description
 - My first LUA Script ever made for CS:GO Cheat Zapped.cc 
 - Credits to [Onion](github.com/cyanewfag) for his help and drawing framework
-- Credits to [Nekowo] for helping with grabbing velocity
+- Credits to nekowo for helping with grabbing velocity
 
 
 # Features explained
