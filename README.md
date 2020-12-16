@@ -1,7 +1,7 @@
   # Clownemoji.club Zapped.cc Multi-LUA
 
 # Description
-- First LUA Script ever made for CS:GO Cheat Zapped.cc 
+- My first LUA Script ever made for CS:GO Cheat Zapped.cc 
 - Credits to [Onion](github.com/cyanewfag) for his help and drawing framework
 
 
@@ -10,6 +10,7 @@
 
 # Killsay: 
 - Killsay Enabled - Enables killsay
+- Message - Custom killsay message (make sure filter name is disabled if you don't want to use variables)
 - On Friendly - Killsay works on teammates
 - Filter Name - Killsay uses custom variables
 
@@ -20,10 +21,6 @@
 - &uid& - Zapped UID - {zapped.userid}
 - &weapon& - Current weapon - {event:get_string("weapon")}
 - &headshot& - Headshot/Bodyshot - {event:get_bool("headshot")}
-
-
-# Killsay:
-- Killsay - Custom killsay message (make sure filter name is disabled if you don't want to use variables)
 
 
 # Namespam:
@@ -64,10 +61,10 @@
 
 
 # Anti-Flicker
-- Anti-Flicker - Enables anti-flicker
-- Focused Check - When you're  unfocused in CS:GO it limits fps and disables legit AA to avoid using cpu for no reason 
-- Choke Check - Disables legit AA when using fake lag 
-- Maximum FPS - Legit AA fps limit
+- Anti-Flicker - Enables Anti-Flicker
+- Focused Check - Disabled Legit AA when tabbed out.
+- Choke Check - Disables Legit AA when using Fake-Lag 
+- Maximum FPS - Legit AA FPS limit
 - Maximum PING - Legit AA ping limit
 - Velocity Threshold - Legit AA velocity limit
 
