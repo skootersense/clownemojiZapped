@@ -41,6 +41,12 @@
 - Gap - Crosshair gap
 
 
+# Animated Synced Clantag
+- Clantag Changer - Enables clantag changer
+- Clantag - Custom clantag
+- Speed (ms) - Clantag speed
+
+
 # Watermark
 - Enable watermark - Enables watermark
 
