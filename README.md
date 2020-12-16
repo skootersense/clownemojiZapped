@@ -69,7 +69,7 @@
 - Velocity Threshold - Legit AA velocity limit
 
 
-# Menu Screenshot
+# Menu Preview
 
 ![ScreenShot](https://i.imgur.com/uqH677U.gif)
 
