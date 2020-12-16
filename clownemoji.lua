@@ -1,4 +1,4 @@
-local version = "1.0.2" -- Version
+local version = "1.0.3" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
@@ -29,6 +29,7 @@ else
     local checkChoke = gui.add_checkbox("Restrict Choke");
     local checkFPS = gui.add_slider("Minimum FPS", 1, 120, 75);
     local checkPing = gui.add_slider("Maximum Ping", 1, 999, 100);
+    local checkVelocity = gui.add_slider("Velocity Threshold", 1, 250, 30);
 
     -- Misc Variables
     local localPlayer;
@@ -277,6 +278,7 @@ else
     
             if (localPlayer ~= nil and engine.in_game()) then
                 values = { game.focused, game.fps, game.latency };
+                local velocity = safeGetProp(localPlayer, "m_vecVelocity");
     
                 if (values[1] ~= nil and values[2] ~= nil and values[3] ~= nil) then
                     if (enableAntiFlicker:get_value()) then
@@ -287,6 +289,7 @@ else
                         if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
                         if (values[2] < checkFPS:get_value()) then allowed = false; end
                         if (values[3] > checkPing:get_value()) then allowed = false; end
+                        if(velocity > checkVelocity:get_value()) then allowed = false; end
     
                         if (allowed) then
                             if (controls[1]:get_value() ~= "Always") then
