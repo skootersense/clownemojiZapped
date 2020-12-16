@@ -1,4 +1,4 @@
-local version = "1.0.3" -- Version
+local version = "1.0.4" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
@@ -27,9 +27,9 @@ else
     local enableAntiFlicker = gui.add_checkbox("Anti-Flicker");
     local checkFocus = gui.add_checkbox("Focused Check");
     local checkChoke = gui.add_checkbox("Restrict Choke");
-    local checkFPS = gui.add_slider("Minimum FPS", 1, 120, 75);
-    local checkPing = gui.add_slider("Maximum Ping", 1, 999, 100);
-    local checkVelocity = gui.add_slider("Velocity Threshold", 1, 250, 30);
+    local checkFPS = gui.add_slider("Minimum FPS", 0, 120, 75);
+    local checkPing = gui.add_slider("Maximum Ping", 0, 999, 100);
+    -- local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
 
     -- Misc Variables
     local localPlayer;
@@ -47,7 +47,6 @@ else
 
     -- Load message
     utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", color.new(110,221,255));
-    utils.event_log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", false);
 
     -- Addictional functions
     local function time_to_ticks(time)
@@ -274,51 +273,48 @@ else
 
     function antiFlicker() 
         if (utils.timestamp() - time >= 1) then
-            localPlayer = entitylist.get_localplayer();
-    
-            if (localPlayer ~= nil and engine.in_game()) then
-                values = { game.focused, game.fps, game.latency };
-                local velocity = safeGetProp(localPlayer, "m_vecVelocity");
-    
-                if (values[1] ~= nil and values[2] ~= nil and values[3] ~= nil) then
-                    if (enableAntiFlicker:get_value()) then
-                        controls[2]:set_value(0);
-                        local allowed = true;
-                            
-                        if (checkFocus:get_value()) then allowed = values[1]; end
-                        if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
-                        if (values[2] < checkFPS:get_value()) then allowed = false; end
-                        if (values[3] > checkPing:get_value()) then allowed = false; end
-                        if(velocity > checkVelocity:get_value()) then allowed = false; end
-    
-                        if (allowed) then
-                            if (controls[1]:get_value() ~= "Always") then
-                                controls[1]:set_value("Always");
-                            end
-                        else
-                            if (controls[1]:get_value() ~= "Disabled") then
-                                controls[1]:set_value("Disabled");
+            if (not keys.key_down(0x01)) then
+                localPlayer = entitylist.get_localplayer();
+        
+                if (localPlayer ~= nil and engine.in_game()) then
+                    values = { game.focused, game.fps, game.latency };
+
+                    if (values[1] ~= nil and values[2] ~= nil and values[3] ~= nil) then
+                        if (enableAntiFlicker:get_value()) then
+                            controls[2]:set_value(0);
+                            local allowed = true;
+                                
+                            if (checkFocus:get_value()) then allowed = values[1]; end
+                            if (checkChoke:get_value() and controls[3]:get_value() ~= 0 or controls[4]:get_value() ~= 0) then allowed = false; end
+                            if (checkFPS:get_value() ~= 0) then if (values[2] < checkFPS:get_value()) then allowed = false; end end
+                            if (checkPing:get_value() ~= 0) then if (values[3] > checkPing:get_value()) then allowed = false; end end
+                            -- if (checkVelocity:get_value() ~= 0) then if (velocity > checkVelocity:get_value()) then allowed = false; end end
+        
+                            if (allowed) then
+                                if (controls[1]:get_value() ~= "Always") then
+                                    controls[1]:set_value("Always");
+                                end
+                            else
+                                if (controls[1]:get_value() ~= "Disabled") then
+                                    controls[1]:set_value("Disabled");
+                                end
                             end
                         end
                     end
                 end
+        
+                time = utils.timestamp();
             end
-    
-            time = utils.timestamp();
         end
     end
 
     function on_render()
         if(enableWatermark:get_value()) then
-            local text = "clownemoji.club lua | [regular] | version: " .. version .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid;
-
-            renderer.text(20, 20, text, color.new(255, 255, 255), font);
+            renderer.text(20, 20, "clownemoji.club lua | [regular] | version: " .. version .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid, color.new(255, 255, 255), font);
         end
 
-        if(greyLobbyColor:get_value()) then
+        if (greyLobbyColor:get_value()) then
             engine.client_cmd("cl_color 64 64 64 64");
-        elseif(not greyLobbyColor:get_value()) then
-            engine.client_cmd("cl_color 0");
         end
 
         runClantag();
