@@ -1,4 +1,4 @@
-# clownemojiZapped
+  # Clownemoji.club Zapped.cc Multi-LUA
 
 # Description
 - First LUA Script ever made for CS:GO Cheat Zapped.cc 
