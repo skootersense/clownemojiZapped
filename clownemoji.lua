@@ -283,6 +283,7 @@ else
                         if (enableAntiFlicker:get_value()) then
                             controls[2]:set_value(0);
                             local allowed = true;
+                            -- Credits nekowo
                             local velocity = vector.new(safeGetProp(localPlayer, "m_vecVelocity[0]", nil, true), safeGetProp(localPlayer, "m_vecVelocity[1]", nil, true), safeGetProp(localPlayer, "m_vecVelocity[2]", nil, true)):length2d();
                                 
                             if (checkFocus:get_value()) then allowed = values[1]; end
