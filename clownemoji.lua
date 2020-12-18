@@ -1,4 +1,4 @@
-local version = "1.0.5" -- Version
+local version = "1.0.6" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
@@ -30,6 +30,7 @@ else
     local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
     local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
     local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
+    local enableVacAuth = gui.add_checkbox("VAC Auth");
 
     -- Misc Variables
     local localPlayer;
@@ -44,6 +45,7 @@ else
     local values = {};
     local controls = { gui.find("legit_aa"), gui.find("legit_max_ping"), gui.find("fake_lag"), gui.find("fake_lag_trigger_limit") }
     local time = utils.timestamp();
+    local vacControls = { gui.find("desync"), gui.find("fake_duck"), gui.find("fake_turn"), gui.find("legit_aa"), gui.find("yaw_modifier"), gui.find("yaw_offset"), gui.find("pitch") };
 
     -- Load message
     utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", color.new(110,221,255));
@@ -271,6 +273,38 @@ else
         end
     end
 
+    function vacAuth() 
+        if(enableVacAuth:get_value()) then
+            if (engine.in_game()) then
+                local lp = entitylist.get_localplayer();
+                local lpHealth = lp:get_prop("m_iHealth");
+                if (lpHealth ~= nil and lpHealth > 0) then
+                    local gameMode = cvars.find("game_mode");
+                    local gameType = cvars.find("game_type");
+                    if (gameType:get_string() ~= "0" or gameMode:get_string() == "0") then
+                        for i = 1, #vacControls do
+                            local value = vacControls[i]:get_value();
+                            if (i == 4 or i == 3 or i == 5 or i == 6 or i == 7) then
+                                if (value ~= 0) then
+                                    vacControls[i]:set_value(0);
+                                end
+                            else
+                                if (value == true) then
+                                    vacControls[i]:set_value(false);
+                                end
+                            end
+                        end
+                
+                        local fov = gui.find("fov_extras");
+                        if (fov:get_value() ~= 10.5) then
+                            fov:set_value(10.5);
+                        end
+                    end
+                end
+            end
+        end
+    end
+
     function antiFlicker() 
         if (utils.timestamp() - time >= 1) then
             if (not keys.key_down(0x01)) then
@@ -321,6 +355,7 @@ else
 
         runClantag();
         antiFlicker();
+        vacAuth();
 
         if (engine.in_game()) then
             localPlayer = entitylist.get_localplayer();
