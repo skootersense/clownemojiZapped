@@ -30,7 +30,6 @@ else
     local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
     local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
     local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
-    local enableVacAuth = gui.add_checkbox("VAC Auth");
 
     -- Misc Variables
     local localPlayer;
@@ -270,38 +269,6 @@ else
         else
             currentTime = globalvars.curtime;
             loaded = false;
-        end
-    end
-
-    function vacAuth() 
-        if(enableVacAuth:get_value()) then
-            if (engine.in_game()) then
-                local lp = entitylist.get_localplayer();
-                local lpHealth = lp:get_prop("m_iHealth");
-                if (lpHealth ~= nil and lpHealth > 0) then
-                    local gameMode = cvars.find("game_mode");
-                    local gameType = cvars.find("game_type");
-                    if (gameType:get_string() ~= "0" or gameMode:get_string() == "0") then
-                        for i = 1, #vacControls do
-                            local value = vacControls[i]:get_value();
-                            if (i == 4 or i == 3 or i == 5 or i == 6 or i == 7) then
-                                if (value ~= 0) then
-                                    vacControls[i]:set_value(0);
-                                end
-                            else
-                                if (value == true) then
-                                    vacControls[i]:set_value(false);
-                                end
-                            end
-                        end
-                
-                        local fov = gui.find("fov_extras");
-                        if (fov:get_value() ~= 10.5) then
-                            fov:set_value(10.5);
-                        end
-                    end
-                end
-            end
         end
     end
 
