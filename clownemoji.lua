@@ -1,4 +1,4 @@
-local version = "1.0.6" -- Version
+local version = "1.0.8" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
@@ -11,6 +11,7 @@ else
     local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
     local greyLobbyColor = gui.add_checkbox("Gray Color Enabled");
     local enableWatermark = gui.add_checkbox("Watermark Enabled");
+    local retardCheck = gui.add_checkbox("Anti-Retard Enabled");
     local zappedConsoleLogger = gui.add_checkbox("Logging Enabled");
     local includeTeammates = gui.add_checkbox("Killsay - On Friendly")
     local filterNames = gui.add_checkbox("Killsay - Filter Name")
@@ -307,6 +308,46 @@ else
                 end
         
                 time = utils.timestamp();
+            end
+        end
+    end
+
+    local time2 = utils.timestamp();
+    function vacAuth()
+        if (utils.timestamp() - time2 >= 1) then
+            if(retardCheck:get_value()) then
+                if (engine.in_game()) then
+                    local ip = game.server_ip;
+                    if (string.find(ip, "A:1")) then
+                        local lp = entitylist.get_localplayer();
+                        local lpHealth = lp:get_prop("m_iHealth");
+                        if (lpHealth ~= nil and lpHealth > 0) then
+                            local gameMode = cvars.find("game_mode");
+                            local gameType = cvars.find("game_type");
+                            if (gameType:get_string() ~= "0" or gameMode:get_string() == "0") then
+                                for i = 1, #vacControls do
+                                    local value = vacControls[i]:get_value();
+                                    if (i == 4 or i == 3 or i == 5 or i == 6 or i == 7) then
+                                        if (value ~= 0) then
+                                            vacControls[i]:set_value(0);
+                                        end
+                                    else
+                                        if (value == true) then
+                                            vacControls[i]:set_value(false);
+                                        end
+                                    end
+                                end
+    
+                                local fov = gui.find("fov_extras");
+                                if (fov:get_value() ~= 10.5) then
+                                    fov:set_value(10.5);
+                                end
+    
+                                time2 = utils.timestamp();
+                            end
+                        end
+                    end
+                end
             end
         end
     end
