@@ -17,6 +17,7 @@
 
 
 # Variables:
+- &user& - Killed entity name - {entity:get_name()}
 - %local& - Local player name - {localPlayer:get_name()}
 - &username& - Zapped forum username - {zapped.username}
 - &uid& - Zapped UID - {zapped.userid}
