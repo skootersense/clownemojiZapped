@@ -44,7 +44,7 @@ else
     local values = {};
     local controls = { gui.find("legit_aa"), gui.find("legit_max_ping"), gui.find("fake_lag"), gui.find("fake_lag_trigger_limit") }
     local time = utils.timestamp();
-    local vacControls = { gui.find("desync"), gui.find("fake_duck"), gui.find("fake_turn"), gui.find("legit_aa"), gui.find("yaw_modifier"), gui.find("yaw_offset"), gui.find("pitch") };
+    local vacControls = { gui.find("desync"), gui.find("fake_duck"), gui.find("fake_turn"), gui.find("legit_aa"), gui.find("modifier"), gui.find("offset"), gui.find("pitch") };
 
     -- Load message
     utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", color.new(110,221,255));
