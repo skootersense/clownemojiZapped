@@ -1,10 +1,11 @@
-local version = "1.0.8" -- Version
+local version = "1.0.9" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
     -- UI Variables
     local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
     local antiReportbot = gui.add_checkbox("Anti-Reportbot Enabled");
+    local antiKick = gui.add_checkbox("Anti-Kick Enabled");
     local enableClantagChanger = gui.add_checkbox("Clantag Enabled");
     local enableKillsay = gui.add_checkbox("Killsay Enabled");
     local enableNameSpam = gui.add_checkbox("Namespam Enabled");
@@ -31,12 +32,14 @@ else
     local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
     local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
     local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
+    local trackList = gui.add_filedropdown("Radio Track List", "C:\\zapped\\lua", ".wav")
 
     -- Misc Variables
     local localPlayer;
     local savedTick = globalvars.curtime;
     local curTick = globalvars.curtime
     local currentTime = globalvars.curtime;
+    local radioCurtime = globalvars.curtime;
     local boolSwap = false;
     local nameChanged = 0;
     local screenSize = engine.screen_size();
@@ -46,9 +49,10 @@ else
     local controls = { gui.find("legit_aa"), gui.find("legit_max_ping"), gui.find("fake_lag"), gui.find("fake_lag_trigger_limit") }
     local time = utils.timestamp();
     local vacControls = { gui.find("desync"), gui.find("fake_duck"), gui.find("fake_turn"), gui.find("legit_aa"), gui.find("modifier"), gui.find("offset"), gui.find("pitch") };
+    local playing = false;
 
     -- Load message
-    utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \n", color.new(110,221,255));
+    utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \nFor radio put your downloaded (.wav) music files into C:\\zapped\\lua folder!", color.new(110,221,255));
 
     -- Addictional functions
     local function time_to_ticks(time)
@@ -207,10 +211,18 @@ else
         end
     end
 
+    function on_shutdown()
+        audio.stop_playback();
+    end
+
     function on_gameevent(e)
         if(e:get_name() == "cs_win_panel_match" and antiReportbot:get_value()) then
             engine.client_cmd("disconnect")
         end 
+
+        if(e:get_name() == "vote_started" and antiKick:get_value()) then
+            engine.client_cmd("disconnect");
+        end
 
         if (e:get_name() == "player_death" and enableKillsay:get_value()) then
             local deadEntity = entitylist.get_entity_from_userid(e:get_int("userid"));
@@ -270,6 +282,26 @@ else
         else
             currentTime = globalvars.curtime;
             loaded = false;
+        end
+    end
+
+    function playSong()
+        local var = trackList:get_value();
+
+        if (var ~= nil) then
+            if (var ~= "") then
+                if (var == "Disabled") then
+                    if (playing) then
+                        playing = false;
+                        audio.stop_playback()
+                    end
+                else
+                    if (not playing) then
+                        playing = true;
+                        audio.play_sound(var)
+                    end
+                end
+            end
         end
     end
 
@@ -364,6 +396,7 @@ else
         runClantag();
         antiFlicker();
         vacAuth();
+        playSong();
 
         if (engine.in_game()) then
             localPlayer = entitylist.get_localplayer();
@@ -410,7 +443,6 @@ else
                 elseif(forceWhenUnscoped:get_value() == false and scopedProp == false) then
                     rendered = true;
                 end
-
 
                 if(rendered) then
                     renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2), (screenSize.y / 2) - (crosshairSize:get_value() + crosshairGap:get_value()), crosshairWidth:get_value(), crosshairSize:get_value(), true, color2, crosshairClr);
