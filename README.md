@@ -70,6 +70,9 @@
 - Maximum PING - Legit AA ping limit
 - Velocity Threshold - Legit AA velocity limit
 
+# Clownemoji Radio
+- Radio Track List - Radio track list from C:\zapped\lua\
+
 
 # Menu Preview
 
