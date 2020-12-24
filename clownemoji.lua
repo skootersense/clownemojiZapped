@@ -5,8 +5,7 @@ else
     -- UI Variables
     local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
     local antiReportbot = gui.add_checkbox("Anti-Reportbot Enabled");
-    local antiKick = gui.add_checkbox("Anti-Kick Enabled");
-    local enableClantagChanger = gui.add_checkbox("Clantag Enabled");
+    enableClantagChanger = gui.add_checkbox("Clantag Enabled");
     local enableKillsay = gui.add_checkbox("Killsay Enabled");
     local enableNameSpam = gui.add_checkbox("Namespam Enabled");
     local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
@@ -219,10 +218,6 @@ else
         if(e:get_name() == "cs_win_panel_match" and antiReportbot:get_value()) then
             engine.client_cmd("disconnect")
         end 
-
-        if(e:get_name() == "vote_started" and antiKick:get_value()) then
-            engine.client_cmd("disconnect");
-        end
 
         if (e:get_name() == "player_death" and enableKillsay:get_value()) then
             local deadEntity = entitylist.get_entity_from_userid(e:get_int("userid"));
