@@ -5,7 +5,7 @@ else
     -- UI Variables
     local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
     local antiReportbot = gui.add_checkbox("Anti-Reportbot Enabled");
-    enableClantagChanger = gui.add_checkbox("Clantag Enabled");
+    local enableClantagChanger = gui.add_checkbox("Clantag Enabled");
     local enableKillsay = gui.add_checkbox("Killsay Enabled");
     local enableNameSpam = gui.add_checkbox("Namespam Enabled");
     local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
