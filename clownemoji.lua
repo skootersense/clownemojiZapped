@@ -23,7 +23,7 @@ else
     gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
     -- Clantag Changer
-    local enableClantagChanger = gui.add_checkbox("Clantag Cghanger");
+    local enableClantagChanger = gui.add_checkbox("Clantag Changer");
     local clantag = gui.add_textbox("Clantag - Text", "clownemoji");
     gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
