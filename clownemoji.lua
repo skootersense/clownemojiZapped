@@ -3,35 +3,56 @@ if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownem
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
     -- UI Variables
-    local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
-    local antiReportbot = gui.add_checkbox("Anti-Reportbot Enabled");
-    local enableClantagChanger = gui.add_checkbox("Clantag Enabled");
+    local antiReportbot = gui.add_checkbox("Anti-Reportbot");
+    local greyLobbyColor = gui.add_checkbox("Gray Lobby Color");
+    local enableWatermark = gui.add_checkbox("Watermark");
+    local retardCheck = gui.add_checkbox("Anti-VAC Auth");
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07); -- please add fucking spacers
+
+    -- Killsay
     local enableKillsay = gui.add_checkbox("Killsay Enabled");
-    local enableNameSpam = gui.add_checkbox("Namespam Enabled");
-    local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
-    local greyLobbyColor = gui.add_checkbox("Gray Color Enabled");
-    local enableWatermark = gui.add_checkbox("Watermark Enabled");
-    local retardCheck = gui.add_checkbox("Anti-Retard Enabled");
-    local zappedConsoleLogger = gui.add_checkbox("Logging Enabled");
     local includeTeammates = gui.add_checkbox("Killsay - On Friendly")
     local filterNames = gui.add_checkbox("Killsay - Filter Name")
-    local messageKillsay = gui.add_textbox("Killsay - Message", "&user& killed by &local& username &username& uid &uid& using &weapon& and was &headshot&")
+    local messageKillsay = gui.add_textbox("Killsay - Message", "&user& killed by &local& username &username& uid &uid& using &weapon& and was &headshot&")  
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+
+    -- Namespam
+    local enableNameSpam = gui.add_checkbox("Namespam Enabled");
     local name = gui.add_textbox("Namespam - Message", "clownemoji.club");
     local nameSpamSpeed = gui.add_slider("Namespam - Interval (ms)", 10, 500, 35);
-    local crosshairColor = gui.add_colorpicker("Crosshair - Color", color.new(214, 76, 203, 255));
-    local forceWhenUnscoped = gui.add_checkbox("Crosshair - Only Snipers");
-    local crosshairSize = gui.add_slider("Crosshair - Size", 0, 300)
-    local crosshairWidth = gui.add_slider("Crosshair - Width", 1, 10)
-    local crosshairGap = gui.add_slider("Crosshair - Gap", 0, 300)
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+
+    -- Clantag Changer
+    local enableClantagChanger = gui.add_checkbox("Clantag Cghanger");
     local clantag = gui.add_textbox("Clantag - Text", "clownemoji");
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+
+    -- Anti Flicker
+    local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
     local speedCheck = gui.add_slider("Clantag - Speed (ms)", 5, 500, 35);
     local checkFocus = gui.add_checkbox("Anti-Flicker - Focused Check");
     local checkChoke = gui.add_checkbox("Anti-Flicker - Restrict Choke");
     local checkFPS = gui.add_slider("Anti-Flicker - Minimum FPS", 0, 120, 75);
     local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
-    local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
     local checkVelocity = gui.add_slider("Velocity Threshold", 0, 250, 30);
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+
+    -- Logging
+    local zappedConsoleLogger = gui.add_checkbox("Logging Enabled");
+    local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+    
+    -- WAV Player
     local trackList = gui.add_filedropdown("Radio Track List", "C:\\zapped\\lua", ".wav")
+    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+
+    -- Crosshair
+    local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
+    local crosshairColor = gui.add_colorpicker("Crosshair - Color", color.new(214, 76, 203, 255));
+    local forceWhenUnscoped = gui.add_checkbox("Crosshair - Only Snipers");
+    local crosshairSize = gui.add_slider("Crosshair - Size", 0, 300)
+    local crosshairWidth = gui.add_slider("Crosshair - Width", 1, 10)
+    local crosshairGap = gui.add_slider("Crosshair - Gap", 0, 300)
 
     -- Misc Variables
     local localPlayer;
@@ -215,7 +236,7 @@ else
     end
 
     function on_gameevent(e)
-        if(e:get_name() == "cs_win_panel_match" and antiReportbot:get_value()) then
+        if (e:get_name() == "cs_win_panel_match" and antiReportbot:get_value()) then
             engine.client_cmd("disconnect")
         end 
 
@@ -243,7 +264,7 @@ else
                 end
             end
 
-            if(zappedConsoleLogger:get_value()) then
+            if (zappedConsoleLogger:get_value()) then
                 safeLog("[Event] - " .. e:get_name() .. "\n", r, g, b, a)
                 safeLog("[Killer] - " .. entitylist.get_entity_from_userid(e:get_int("attacker")):get_name() .. "\n", r, g, b, a)
                 safeLog("[Killed] - " .. entitylist.get_entity_from_userid(e:get_int("userid")):get_name() .. "\n", r, g, b, a)
@@ -280,7 +301,7 @@ else
         end
     end
 
-    function playSong()
+    function runAudio()
         local var = trackList:get_value();
 
         if (var ~= nil) then
@@ -300,7 +321,7 @@ else
         end
     end
 
-    function antiFlicker() 
+    function runAntiFlicker() 
         if (utils.timestamp() - time >= 1) then
             if (not keys.key_down(0x01)) then
                 localPlayer = entitylist.get_localplayer();
@@ -340,9 +361,9 @@ else
     end
 
     local time2 = utils.timestamp();
-    function vacAuth()
+    function runAntiAuth()
         if (utils.timestamp() - time2 >= 1) then
-            if(retardCheck:get_value()) then
+            if (retardCheck:get_value()) then
                 if (engine.in_game()) then
                     local ip = game.server_ip;
                     if (string.find(ip, "A:1")) then
@@ -379,20 +400,45 @@ else
         end
     end
 
-    function on_render()
-        if(enableWatermark:get_value()) then
+    function drawCrosshair()
+        if (engine.in_game()) then
+            if (crosshairEnabled:get_value()) then
+                local snipers = { "G3SG1", "AWP", "SSG-08", "SCAR-20" }
+
+                local currentWeapon = entitylist.get_player_weapon(localPlayer);
+                currentWeapon = currentWeapon:get_name();
+
+                local crosshairClr = crosshairColor:get_value();
+                local color2 = crosshairClr;
+
+                local scopedProp = safeGetProp(localPlayer, "m_bIsScoped");
+                local rendered = false;
+
+                if (forceWhenUnscoped:get_value() or scopedProp == true) then
+                    if (tableContains(snipers, currentWeapon)) then
+                        rendered = true;
+                    end
+                elseif (forceWhenUnscoped:get_value() == false and scopedProp == false) then
+                    rendered = true;
+                end
+
+                if (rendered) then
+                    renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2), (screenSize.y / 2) - (crosshairSize:get_value() + crosshairGap:get_value()), crosshairWidth:get_value(), crosshairSize:get_value(), true, color2, crosshairClr);
+                    renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2), (screenSize.y / 2) + crosshairGap:get_value(), crosshairWidth:get_value(), crosshairSize:get_value(), true, crosshairClr, color2);
+                    renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2) - crosshairSize:get_value() - crosshairGap:get_value(), (screenSize.y / 2) - (crosshairWidth:get_value() / 2), crosshairSize:get_value(), crosshairWidth:get_value(), false, color2, crosshairClr);
+                    renderer.gradient_rect((screenSize.x / 2) + (crosshairWidth:get_value() / 2) + crosshairGap:get_value(), (screenSize.y / 2) - (crosshairWidth:get_value() / 2), crosshairSize:get_value(), crosshairWidth:get_value(), false, crosshairClr, color2);
+                end
+            end
+        end
+    end
+
+    function drawWatermark()
+        if (enableWatermark:get_value()) then
             renderer.text(20, 20, "clownemoji.club lua | [regular] | version: " .. version .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid, color.new(255, 255, 255), font);
         end
+    end
 
-        if (greyLobbyColor:get_value()) then
-            engine.client_cmd("cl_color 64 64 64 64");
-        end
-
-        runClantag();
-        antiFlicker();
-        vacAuth();
-        playSong();
-
+    function runNameSpam()
         if (engine.in_game()) then
             localPlayer = entitylist.get_localplayer();
             curTick = globalvars.curtime;
@@ -418,41 +464,25 @@ else
                     end
                 end
             end
-
-            if(crosshairEnabled:get_value()) then
-                local snipers = { "G3SG1", "AWP", "SSG-08", "SCAR-20" }
-
-                local currentWeapon = entitylist.get_player_weapon(localPlayer);
-                currentWeapon = currentWeapon:get_name();
-
-                local crosshairClr = crosshairColor:get_value();
-                local color2 = crosshairClr;
-
-                local scopedProp = safeGetProp(localPlayer, "m_bIsScoped");
-                local rendered = false;
-
-                if (forceWhenUnscoped:get_value() or scopedProp == true) then
-                    if (tableContains(snipers, currentWeapon)) then
-                        rendered = true;
-                    end
-                elseif(forceWhenUnscoped:get_value() == false and scopedProp == false) then
-                    rendered = true;
-                end
-
-                if(rendered) then
-                    renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2), (screenSize.y / 2) - (crosshairSize:get_value() + crosshairGap:get_value()), crosshairWidth:get_value(), crosshairSize:get_value(), true, color2, crosshairClr);
-                    renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2), (screenSize.y / 2) + crosshairGap:get_value(), crosshairWidth:get_value(), crosshairSize:get_value(), true, crosshairClr, color2);
-                    renderer.gradient_rect((screenSize.x / 2) - (crosshairWidth:get_value() / 2) - crosshairSize:get_value() - crosshairGap:get_value(), (screenSize.y / 2) - (crosshairWidth:get_value() / 2), crosshairSize:get_value(), crosshairWidth:get_value(), false, color2, crosshairClr);
-                    renderer.gradient_rect((screenSize.x / 2) + (crosshairWidth:get_value() / 2) + crosshairGap:get_value(), (screenSize.y / 2) - (crosshairWidth:get_value() / 2), crosshairSize:get_value(), crosshairWidth:get_value(), false, crosshairClr, color2);
-                end
-            end
-
-            
         else
             savedTick = globalvars.curtime;
             curTick = globalvars.curtime;
             nameChanged = 0;
             loaded = false;
         end
+    end
+
+    function on_render()
+        if (greyLobbyColor:get_value()) then
+            engine.client_cmd("cl_color 64 64 64 64");
+        end
+
+        drawCrosshair();
+        drawWatermark();
+        runClantag();
+        runAntiFlicker();
+        runAntiAuth();
+        runAudio();
+        runNameSpam();
     end
 end
