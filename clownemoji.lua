@@ -1,4 +1,4 @@
-local version = "1.0.9" -- Version
+local version = "1.1.0" -- Version
 if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/version"), version)) then -- Auto Update
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
@@ -70,9 +70,11 @@ else
     local time = utils.timestamp();
     local vacControls = { gui.find("desync"), gui.find("fake_duck"), gui.find("fake_turn"), gui.find("legit_aa"), gui.find("modifier"), gui.find("offset"), gui.find("pitch") };
     local playing = false;
+    local colors = { gui.find("main"), gui.find("accent")  }
+    local defaults = { color.new(255, 255, 255, 255), renderer.create_font("Arial", 12, true) }
 
     -- Load message
-    utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \nFor radio put your downloaded (.wav) music files into C:\\zapped\\lua folder!", color.new(110,221,255));
+    utils.log("Clownemoji.club LUA Loaded | Welcome back, " .. zapped.username .. " | Script made by @neplo and @onion \nFor radio put your downloaded (.wav) music files into C:\\zapped\\lua folder!\n", color.new(235, 64, 52));
 
     -- Addictional functions
     local function time_to_ticks(time)
@@ -432,9 +434,52 @@ else
         end
     end
 
+    function drawShadow(x, y, w, h, size, startOpacity)
+        local step = startOpacity / size;
+        
+        for i = 1, size do
+            local newOpacity;
+            if (startOpacity - (step * (i - 1)) < 0) then
+                newOpacity = 0;
+            else
+                newOpacity = startOpacity - (step * (i - 1));
+            end
+
+            renderer.rect(x - (i - 1), y - (i - 1), w + ((i - 1) * 2), h + ((i - 1) * 2), color.new(0, 0, 0, newOpacity))
+        end
+    end
+
+    function drawText(x, y, text, font, color, style)
+        if (x ~= nil and y ~= nil and text ~= nil) then
+            text = tostring(text);
+            if (color == nil) then color = defaults[1]; end
+            if (font == nil) then font = defaults[2]; end
+    
+            if (style ~= "c" and style ~= "r" and style ~= "cr" and style ~= "cl") then
+                renderer.text(x, y, text, color, font);
+            else
+                local textSize = renderer.get_text_size(text, font);
+    
+                if (style == "c") then
+                    renderer.text(x - (textSize.x / 2), y - (textSize.y / 2), text, color, font);
+                elseif (style == "r") then
+                    renderer.text(x - textSize.x, y, text, color, font);
+                elseif (style == "cl") then
+                    renderer.text(x, y - (textSize.y / 2), text, color, font);
+                else
+                    renderer.text(x - textSize.x, y - (textSize.y / 2), text, color, font);
+                end
+            end
+        end
+    end
+
     function drawWatermark()
         if (enableWatermark:get_value()) then
-            renderer.text(20, 20, "clownemoji.club lua | [regular] | version: " .. version .. " | username: " .. zapped.username .. " | uid: " .. zapped.userid, color.new(255, 255, 255), font);
+            renderer.set_clip(screenSize.x - 310, 10, 300, 21)
+            renderer.filled_rect(screenSize.x - 310, 10, 300, 3, colors[2]:get_value());
+            renderer.filled_rect(screenSize.x - 310, 14, 300, 18, colors[1]:get_value());
+            drawText(screenSize.x - 160, 23, "clownemoji.club | v" .. version .. " | user: " .. zapped.username, font, color.new(255, 255, 255), "c");
+            renderer.remove_clip()
         end
     end
 
