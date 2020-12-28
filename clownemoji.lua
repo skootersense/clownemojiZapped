@@ -475,10 +475,17 @@ else
 
     function drawWatermark()
         if (enableWatermark:get_value()) then
-            renderer.set_clip(screenSize.x - 310, 10, 300, 21)
-            renderer.filled_rect(screenSize.x - 310, 10, 300, 3, colors[2]:get_value());
-            renderer.filled_rect(screenSize.x - 310, 14, 300, 18, colors[1]:get_value());
-            drawText(screenSize.x - 160, 23, "clownemoji.club | v" .. version .. " | user: " .. zapped.username, font, color.new(255, 255, 255), "c");
+            renderer.set_clip(screenSize.x - 260, 10, 250, 21)
+            renderer.filled_rect(screenSize.x - 260, 10, 250, 3, colors[2]:get_value());
+            renderer.filled_rect(screenSize.x - 260, 14, 250, 18, colors[1]:get_value());
+            local text;
+            if (renderer.get_text_size("clownemoji.club | v" .. version .. " | " .. zapped.username).x > 230) then
+                text = "clownemoji | v" .. version .. " | " .. zapped.username;
+            else
+                text = "clownemoji.club | v" .. version .. " | " .. zapped.username;
+            end
+
+            drawText(screenSize.x - 135, 23, text, font, color.new(255, 255, 255), "c");
             renderer.remove_clip()
         end
     end
