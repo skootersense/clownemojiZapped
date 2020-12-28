@@ -25,11 +25,11 @@ else
     -- Clantag Changer
     local enableClantagChanger = gui.add_checkbox("Clantag Changer");
     local clantag = gui.add_textbox("Clantag - Text", "clownemoji");
-    local speedCheck = gui.add_slider("Clantag - Speed (ms)", 5, 500, 35);
     gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
     -- Anti Flicker
     local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
+    local speedCheck = gui.add_slider("Clantag - Speed (ms)", 5, 500, 35);
     local checkFocus = gui.add_checkbox("Anti-Flicker - Focused Check");
     local checkChoke = gui.add_checkbox("Anti-Flicker - Restrict Choke");
     local checkFPS = gui.add_slider("Anti-Flicker - Minimum FPS", 0, 120, 75);
