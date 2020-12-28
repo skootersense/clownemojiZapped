@@ -76,7 +76,7 @@
 
 # Menu Preview
 
-![ScreenShot](https://i.imgur.com/uqH677U.gif)
+![ScreenShot](https://streamable.com/e/6wmcgr?autoplay=1&nocontrols=1)
 
 
 # About Clownemoji.club
