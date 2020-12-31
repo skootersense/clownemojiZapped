@@ -4,7 +4,7 @@ if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownem
 else
     -- UI Variables
     local antiReportbot = gui.add_checkbox("Anti-Reportbot");
-    local greyLobbyColor = gui.add_checkbox("Gray Lobby Color");
+    local greyLobbyColor = gui.add_checkbox("Grey Lobby Color");
     local enableWatermark = gui.add_checkbox("Watermark");
     local retardCheck = gui.add_checkbox("Anti-VAC Auth");
     gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07); -- please add fucking spacers
