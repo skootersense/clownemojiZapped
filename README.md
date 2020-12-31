@@ -59,7 +59,7 @@
 
 
 # Anti Reportbot
-- Anti-Reportbot - Executes 'disconnect' command when game has ended
+- Anti-Reportbot - Prevents from getting report botted
 
 
 # Anti-Flicker
