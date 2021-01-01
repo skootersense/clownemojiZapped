@@ -3,31 +3,32 @@ if (not string.find(http.get("https://raw.githubusercontent.com/smdfatnn/clownem
     http.download("https://raw.githubusercontent.com/smdfatnn/clownemojiZapped/main/clownemoji.lua", "C:/zapped/lua/clownemoji.lua")
 else
     -- UI Variables
+    gui.add_spacer("Options", 30);
     local antiReportbot = gui.add_checkbox("Anti-Reportbot");
-    local greyLobbyColor = gui.add_checkbox("Grey Lobby Color");
+    local greyLobbyColor = gui.add_checkbox("Gray Lobby Color");
     local enableWatermark = gui.add_checkbox("Watermark");
     local retardCheck = gui.add_checkbox("Anti-VAC Auth");
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07); -- please add fucking spacers
 
     -- Killsay
+    gui.add_spacer("Killsay Settings", 30);
     local enableKillsay = gui.add_checkbox("Killsay Enabled");
     local includeTeammates = gui.add_checkbox("Killsay - On Friendly")
     local filterNames = gui.add_checkbox("Killsay - Filter Name")
     local messageKillsay = gui.add_textbox("Killsay - Message", "&user& killed by &local& username &username& uid &uid& using &weapon& and was &headshot&")  
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
     -- Namespam
+    gui.add_spacer("Namespam Settings", 30);
     local enableNameSpam = gui.add_checkbox("Namespam Enabled");
     local name = gui.add_textbox("Namespam - Message", "clownemoji.club");
     local nameSpamSpeed = gui.add_slider("Namespam - Interval (ms)", 10, 500, 35);
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
     -- Clantag Changer
+    gui.add_spacer("Clantag Settings", 30);
     local enableClantagChanger = gui.add_checkbox("Clantag Changer");
     local clantag = gui.add_textbox("Clantag - Text", "clownemoji");
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
     -- Anti Flicker
+    gui.add_spacer("Anti-Flicker Settings", 30);
     local enableAntiFlicker = gui.add_checkbox("Anti-Flicker Enabled");
     local speedCheck = gui.add_slider("Clantag - Speed (ms)", 5, 500, 35);
     local checkFocus = gui.add_checkbox("Anti-Flicker - Focused Check");
@@ -35,18 +36,19 @@ else
     local checkFPS = gui.add_slider("Anti-Flicker - Minimum FPS", 0, 120, 75);
     local checkPing = gui.add_slider("Anti-Flicker - Maximum Ping", 0, 999, 100);
     local checkVelocity = gui.add_slider("Anti-Flicker - Velocity Threshold", 0, 250, 30);
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
 
     -- Logging
+    gui.add_spacer("Log Settings", 30);
     local zappedConsoleLogger = gui.add_checkbox("Logging Enabled");
     local consoleColor = gui.add_colorpicker("Logging - Color", color.new(214, 76, 203, 255))
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
     
     -- WAV Player
+    gui.add_spacer("Radio Settings", 30);
     local trackList = gui.add_filedropdown("Radio Track List", "C:\\zapped\\lua", ".wav")
-    gui.add_keybind(" ", 0x07); gui.add_keybind(" ", 0x07);
+    local playVoice = gui.add_checkbox("Play Voice");
 
     -- Crosshair
+    gui.add_spacer("Crosshair Settings", 30);
     local crosshairEnabled = gui.add_checkbox("Crosshair Enabled");
     local crosshairColor = gui.add_colorpicker("Crosshair - Color", color.new(214, 76, 203, 255));
     local forceWhenUnscoped = gui.add_checkbox("Crosshair - Only Snipers");
@@ -316,7 +318,9 @@ else
                 else
                     if (not playing) then
                         playing = true;
-                        audio.play_sound(var)
+                        if(playVoice:get_value()) then
+                            audio.play_voice(var);
+                        end
                     end
                 end
             end
