@@ -320,6 +320,8 @@ else
                         playing = true;
                         if(playVoice:get_value()) then
                             audio.play_voice(var);
+                        elseif(not playVoice:get_value()) then
+                            audio.play_sound(var);
                         end
                     end
                 end
